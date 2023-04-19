@@ -1,0 +1,45 @@
+class node:
+    def __init__(self, region="", index=-1):
+        self.index = [region, index]
+        self.pointer = []
+
+    def add_pointer(self, pointer):
+        self.pointer.append(pointer)
+
+    def view_pointer(self):
+        for node in self.pointer:
+            print(node.index, end=" ")
+
+### path 1 ###
+west = [node("w", 1),node("w", 2)]
+east = [node("e", 1), node("e", 2), node("e", 3)]
+
+west[0].add_pointer(west[1])
+west[0].add_pointer(east[0])
+
+west[1].add_pointer(west[0])
+
+east[0].add_pointer(west[0])
+east[0].add_pointer(east[2])
+
+east[1].add_pointer(east[2])
+
+east[2].add_pointer(east[0])
+east[2].add_pointer(east[1])
+
+def explore(target, node, count=0, prev=node()):
+    if target == node:
+        return count
+    elif len(node.pointer) == 1 and node.pointer[0] == prev:
+        return None
+    else:
+        for pointer in target.pointer:
+            print(node.view_pointer(), node.index, prev.index)
+            count += 1
+            explore(target, pointer, count, node)
+
+
+dist_lst = []
+for west_node in west:
+    for east_node in east:
+        dist_lst.append(explore(west_node, east_node))
