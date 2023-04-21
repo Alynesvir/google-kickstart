@@ -8,7 +8,7 @@ class node:
 
     def view_pointer(self):
         for node in self.pointer:
-            print(node.index, end=" ")
+            print(node.index, end=" | ")
 
 ### path 1 ###
 west = [node("w", 1),node("w", 2)]
@@ -28,18 +28,28 @@ east[2].add_pointer(east[0])
 east[2].add_pointer(east[1])
 
 def explore(target, node, count=0, prev=node()):
+    # print(len(node.pointer), node.view_pointer())
     if target == node:
+        print(count)
         return count
     elif len(node.pointer) == 1 and node.pointer[0] == prev:
-        return None
+        pass
     else:
-        for pointer in target.pointer:
-            print(node.view_pointer(), node.index, prev.index)
-            count += 1
-            explore(target, pointer, count, node)
+        for pointer in node.pointer:
+            # print("")
+            # print("node", node.view_pointer(), node.index, prev.index)
+            if pointer != prev:
+                count += 1
+                explore(target, pointer, count, node)
 
 
 dist_lst = []
 for west_node in west:
     for east_node in east:
         dist_lst.append(explore(west_node, east_node))
+
+dist_lst.append(explore(west[0], west[1]))
+
+dist_lst.append(explore(east[0], east[1]))
+dist_lst.append(explore(east[0], east[2]))
+dist_lst.append(explore(east[1], east[2]))
